@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
+import time
 
 # Set up the driver
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -129,8 +130,11 @@ try:
     except TimeoutException:
         print("Error message for the email field was not found.")
 
+    # Wait for form to be populated and error message to appear before taking screenmshot
+    time.sleep(2)
+
     # Take a screenshot after submitting the form
-    driver.save_screenshot('c:/Users/User-PC/Downloads/form_submission_screenshot.png')
+    driver.save_screenshot('./form_submission_screenshot.png')
     print("Screenshot taken and saved as 'form_submission_screenshot.png'.")
 
 except TimeoutException:
