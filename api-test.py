@@ -20,13 +20,21 @@ end_time = time.time()  # End timing
 # Calculate response time
 response_time = end_time - start_time
 
-# Check if the response status code is 200
-if response.status_code == 200:
-    print("Success: The API request was successful, and the response status is 200.")
+try:
+    # Assert that the response status is 200
+    assert response.status_code == 200, f"Failure: Expected status code 200, but got {response.status_code} instead."
+    
     # Assert that the response time is less than 2 seconds
     assert response_time < 2, f"Response time is too long: {response_time:.2f} seconds"
-else:
-    print(f"Failure: Expected status code 200, but got {response.status_code} instead.")
+    
+    # Assert that the Server header has a value of 'Cloudflare'
+    server_header = response.headers.get('Server', '')
+    assert 'Cloudflare' in server_header, f"Server header value is not 'Cloudflare': {server_header}"
+
+    print("All checks passed successfully.")
+    
+except AssertionError as e:
+    print(e)
 
 # Close the browser
 driver.quit()
